@@ -11,17 +11,35 @@ mongoose.connect('mongodb://localhost:27017/shopApp', { useNewURLParser: true, u
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        maxLength: 20
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    qty: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
     }
+
 })
 
-const Product = mongoos.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);
 
-const bike = new Product({ name: 'Mountain Bike', price: 599 })
+const bike = new Product({ name: 'Mountain Bike', price: 599, categories: ['Cycling', 'Safety'] })
 bike.save()
     .then(data => {
         console.log('It worked!');
@@ -29,5 +47,5 @@ bike.save()
     })
     .catch(err => {
         console.log('ERROR!');
-        console.log(err.errors.name.properties.message);
+        console.log(err);
     })
