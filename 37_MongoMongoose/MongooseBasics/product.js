@@ -41,9 +41,36 @@ const productSchema = new mongoose.Schema({
 
 })
 
+productSchema.methods.greet = function () {
+    console.log('hi')
+    console.log(`- from ${this.name}`)
+}
+
+productSchema.methods.toggleOnSale = function () {
+    this.onSale = !this.onSale;
+    return this.save();
+}
+
+productSchema.methods.addCategory = function (newDog) {
+    this.categories.push(newDog);
+    return this.save();
+}
+
 const Product = mongoose.model('Product', productSchema);
 
-const bike = new Product({ name: 'Cycling Jersey', price: 20.00, categories: ['Cycling', 'Safety'], size: 'M' })
+const findProdcut = async () => {
+    const foundProduct = await Product.findOne({ name: 'Moutain Bike' })
+    console.log(foundProduct)
+    await foundProduct.toggleOnSale();
+    console.log(foundProduct)
+    await foundProduct.addCategory('Outdoors')
+    console.log(foundProduct)
+}
+
+findProdcut();
+
+
+/* const bike = new Product({ name: 'Cycling Jersey', price: 20.00, categories: ['Cycling', 'Safety'], size: 'M' })
 bike.save()
     .then(data => {
         console.log('It worked!');
@@ -52,7 +79,7 @@ bike.save()
     .catch(err => {
         console.log('ERROR!');
         console.log(err);
-    })
+    }) */
 
 /* Product.findOneAndUpdate({ name: 'Tire Pump' }, { price: -10.99 }, { new: true, runValidators: true })
     .then(data => {
