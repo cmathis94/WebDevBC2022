@@ -56,6 +56,10 @@ productSchema.methods.addCategory = function (newDog) {
     return this.save();
 }
 
+productSchema.statics.fireSale = function () {
+    return this.updateMany({}, { onSale: true, price: 0 })
+}
+
 const Product = mongoose.model('Product', productSchema);
 
 const findProdcut = async () => {
@@ -67,7 +71,9 @@ const findProdcut = async () => {
     console.log(foundProduct)
 }
 
-findProdcut();
+Product.fireSale().then(res => console.log(res));
+
+/* findProdcut(); */
 
 
 /* const bike = new Product({ name: 'Cycling Jersey', price: 20.00, categories: ['Cycling', 'Safety'], size: 'M' })
